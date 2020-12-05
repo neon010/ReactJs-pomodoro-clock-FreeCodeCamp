@@ -31,38 +31,66 @@ class App extends React.Component{
     this.refresh = this.refresh.bind(this);
     this.timerInterval = this.timerInterval.bind(this);
   }
+
+
   componentDidMount(){
     let {sessionTime} = this.state;
     this.setState({
-      currentTime: sessionTime*60
+      currentTime: sessionTime*60,
     })
   }
+
+  componentWillUpdate(newProps, newState){
+    console.log(newState, newProps);
+
+  }
   breakTimeDecrement(){
-    let {breakTime} = this.state;
-    this.setState({
-      breakTime: breakTime-1
-    });
+    let {breakTime, timer} = this.state;
+    if(timer === null){
+      this.setState({
+        currentTime: breakTime*60,
+        breakTime: breakTime-1,
+        isSession: false,
+      });
+    }
   }
+
+
   breakTimeIncrement(){
-    let {breakTime} = this.state;
-    this.setState({
-      breakTime: breakTime+1
-    });
+    let {breakTime, timer} = this.state;
+    if (timer === null) {
+      this.setState({
+        currentTime: breakTime*60,
+        breakTime: breakTime+1,
+        isSession:false,
+      });
+    }
   }
+
+
   sessionTimeDecrement(){
-    let {sessionTime} = this.state
-    this.setState({
-      sessionTime: sessionTime -1
-    });
-
+    let {sessionTime, timer} = this.state;
+    if (timer === null) {
+      this.setState({
+        currentTime: sessionTime*60,
+        sessionTime: sessionTime -1,
+      });
+    }
   }
+
+
   sessionTimeIecrement(){
-    let {sessionTime} = this.state;
-    this.setState({
-      sessionTime: sessionTime+1
-    });
-
+    let {sessionTime, timer} = this.state;
+    if(timer === null){
+      this.setState({
+        sessionTime: sessionTime+1,
+        currentTime: sessionTime*60,
+      });
+    }
   }
+
+
+
   startOrStop(){
     let {isStart, timer} = this.state;
     if(isStart === false){
@@ -80,6 +108,9 @@ class App extends React.Component{
       });
     }
   }
+
+
+
   timerInterval(){
     let {currentTime, isSession, breakTime, sessionTime, isCompleted} = this.state;
     this.setState({
@@ -104,8 +135,10 @@ class App extends React.Component{
         this.setState({
           currentTime: sessionTime*60,
           isSession: true,
-
+          isCompleted: false
         })
+        let audio = new Audio("https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav");
+        audio.play();
       }else{
         this.setState({
           currentTime: currentTime- 1
@@ -114,6 +147,9 @@ class App extends React.Component{
       console.log(currentTime);
   }
   }
+
+
+
   refresh(){
     let {timer, sessionTime} = this.state;
     document.getElementById("start_stop").className ="fa fa-play fa-2x";
@@ -129,6 +165,9 @@ class App extends React.Component{
       isCompleted: false
     })
   }
+
+
+
   render(){
     let {breakTime, sessionTime, isSession, currentTime} = this.state;
     return (
